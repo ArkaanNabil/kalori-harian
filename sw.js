@@ -1,5 +1,5 @@
 /* Service worker: app shell cache-first, supaya app jalan offline. */
-const CACHE = 'kalori-harian-v1';
+const CACHE = 'kalori-harian-v2';
 const SHELL = [
   './',
   './index.html',

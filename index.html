@@ -146,8 +146,8 @@
             <select id="pGender"><option value="male">Pria</option><option value="female">Wanita</option></select>
           </label>
           <label class="field"><span>Umur (tahun)</span><input id="pAge" type="number" inputmode="numeric" min="10" max="100"></label>
-          <label class="field"><span>Tinggi (cm)</span><input id="pHeight" type="number" inputmode="decimal" min="100" max="230"></label>
-          <label class="field"><span>Berat (kg)</span><input id="pWeight" type="number" inputmode="decimal" min="30" max="250" step="0.1"></label>
+          <label class="field"><span>Tinggi (cm)</span><input id="pHeight" type="text" inputmode="decimal" autocomplete="off"></label>
+          <label class="field"><span>Berat (kg)</span><input id="pWeight" type="text" inputmode="decimal" autocomplete="off"></label>
         </div>
         <label class="field"><span>Level aktivitas</span>
           <select id="pActivity">
@@ -168,7 +168,7 @@
           </select>
         </label>
         <div class="grid2">
-          <label class="field"><span>Protein (g per kg BB)</span><input id="pProteinKg" type="number" inputmode="decimal" step="0.1" min="0.8" max="3"></label>
+          <label class="field"><span>Protein (g per kg BB)</span><input id="pProteinKg" type="text" inputmode="decimal" autocomplete="off"></label>
           <label class="field"><span>Lemak (% kalori)</span><input id="pFatPct" type="number" inputmode="numeric" step="1" min="15" max="45"></label>
         </div>
         <div class="calcbox" id="calcBox"></div>
@@ -222,7 +222,7 @@
         <p class="hint" id="dataHint"></p>
       </div>
 
-      <p class="version">Kalori Harian · v1.0.0</p>
+      <p class="version">Kalori Harian · v1.0.1</p>
       <div class="bottom-pad"></div>
     </div>
   </section>

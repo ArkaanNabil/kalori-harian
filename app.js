@@ -82,6 +82,7 @@ const num = (v, d) => { const n = parseFloat(String(v).replace(',', '.')); retur
 const r0 = (n) => Math.round(n || 0);
 const r1 = (n) => Math.round((n || 0) * 10) / 10;
 const r2 = (n) => Math.round((n || 0) * 100) / 100;
+const dstr = (n) => (n == null || n === '') ? '' : String(n).replace('.', ',');
 const fmt = (n) => r0(n).toLocaleString('id-ID');
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
@@ -342,11 +343,11 @@ function fillSettings() {
   const s = state.settings;
   $('#pGender').value = s.gender;
   $('#pAge').value = s.age;
-  $('#pHeight').value = s.height;
-  $('#pWeight').value = s.weight;
+  $('#pHeight').value = dstr(s.height);
+  $('#pWeight').value = dstr(s.weight);
   $('#pActivity').value = String(s.activity);
   $('#pGoal').value = String(s.goal);
-  $('#pProteinKg').value = s.proteinKg;
+  $('#pProteinKg').value = dstr(s.proteinKg);
   $('#pFatPct').value = s.fatPct;
   $('#tOverride').checked = !!s.override;
   const t = computeTargets(s);
@@ -498,10 +499,10 @@ function foodFormHTML(f) {
     <label class="field"><span>Takaran acuan</span>
       <input id="fUnit" type="text" value="${esc(f.unit || '100 g')}" placeholder="100 g / 1 porsi / 1 butir"></label>
     <div class="grid2">
-      <label class="field"><span>Kalori (kkal)</span><input id="fKcal" type="number" inputmode="decimal" value="${f.kcal != null ? f.kcal : ''}"></label>
-      <label class="field"><span>Protein (g)</span><input id="fProtein" type="number" inputmode="decimal" value="${f.protein != null ? f.protein : ''}"></label>
-      <label class="field"><span>Lemak (g)</span><input id="fFat" type="number" inputmode="decimal" value="${f.fat != null ? f.fat : ''}"></label>
-      <label class="field"><span>Karbo (g)</span><input id="fCarbs" type="number" inputmode="decimal" value="${f.carbs != null ? f.carbs : ''}"></label>
+      <label class="field"><span>Kalori (kkal)</span><input id="fKcal" type="text" inputmode="decimal" autocomplete="off" value="${dstr(f.kcal)}"></label>
+      <label class="field"><span>Protein (g)</span><input id="fProtein" type="text" inputmode="decimal" autocomplete="off" value="${dstr(f.protein)}"></label>
+      <label class="field"><span>Lemak (g)</span><input id="fFat" type="text" inputmode="decimal" autocomplete="off" value="${dstr(f.fat)}"></label>
+      <label class="field"><span>Karbo (g)</span><input id="fCarbs" type="text" inputmode="decimal" autocomplete="off" value="${dstr(f.carbs)}"></label>
     </div>`;
 }
 function readFoodForm() {
@@ -536,10 +537,10 @@ function drawQuick(pane, mealKey) {
   pane.innerHTML = `
     <label class="field"><span>Nama</span><input id="qName" type="text" placeholder="Makan di luar" autocomplete="off"></label>
     <div class="grid2">
-      <label class="field"><span>Kalori (kkal)</span><input id="qKcal" type="number" inputmode="decimal"></label>
-      <label class="field"><span>Protein (g)</span><input id="qProtein" type="number" inputmode="decimal"></label>
-      <label class="field"><span>Lemak (g)</span><input id="qFat" type="number" inputmode="decimal"></label>
-      <label class="field"><span>Karbo (g)</span><input id="qCarbs" type="number" inputmode="decimal"></label>
+      <label class="field"><span>Kalori (kkal)</span><input id="qKcal" type="text" inputmode="decimal" autocomplete="off"></label>
+      <label class="field"><span>Protein (g)</span><input id="qProtein" type="text" inputmode="decimal" autocomplete="off"></label>
+      <label class="field"><span>Lemak (g)</span><input id="qFat" type="text" inputmode="decimal" autocomplete="off"></label>
+      <label class="field"><span>Karbo (g)</span><input id="qCarbs" type="text" inputmode="decimal" autocomplete="off"></label>
     </div>
     <p class="hint" style="margin-top:14px">Catatan sekali pakai, tidak disimpan ke pustaka.</p>
     <div class="btnrow"><button class="btn primary" id="quickAdd">Tambah</button></div>`;
@@ -562,7 +563,7 @@ function openQtySheet(food, mealKey) {
     <label class="field"><span>Jumlah (× ${esc(food.unit)})</span>
       <span class="stepper">
         <button type="button" id="minus">−</button>
-        <input id="qty" type="number" inputmode="decimal" step="0.25" min="0" value="1">
+        <input id="qty" type="text" inputmode="decimal" autocomplete="off" value="1">
         <button type="button" id="plus">+</button>
       </span>
     </label>
@@ -582,7 +583,7 @@ function openQtySheet(food, mealKey) {
         <div><strong>${r1(food.fat * q)}</strong><span>lemak</span></div>
         <div><strong>${r1(food.carbs * q)}</strong><span>karbo</span></div>`;
     };
-    const bump = (d) => { qtyEl.value = String(Math.max(0, r2(num(qtyEl.value, 0) + d))); draw(); };
+    const bump = (d) => { qtyEl.value = dstr(Math.max(0, r2(num(qtyEl.value, 0) + d))); draw(); };
     $('#minus', body).addEventListener('click', () => bump(-0.25));
     $('#plus', body).addEventListener('click', () => bump(0.25));
     qtyEl.addEventListener('input', draw);
@@ -786,7 +787,7 @@ function bind() {
   ].forEach(sel => {
     const el = $(sel);
     el.addEventListener('change', readSettingsForm);
-    if (el.tagName === 'INPUT' && el.type === 'number') el.addEventListener('input', readSettingsForm);
+    if (el.tagName === 'INPUT' && el.type !== 'checkbox') el.addEventListener('input', readSettingsForm);
   });
 
   $('#exportBtn').addEventListener('click', exportData);
